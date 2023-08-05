@@ -22,19 +22,19 @@ jobs:
 
     deploy:
       docker:
-        working_directory:  /app
-          - image: circleci/node:16
-        steps:
-          - checkout
-          - setup-remote-docker
-            version:  17.05.0-ce
-          - run:
-            name: Build and push docker image
-            command: |
-              docker build -t node-docker .
-              echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-              docker tag node-docker:latest "$DOCKER_USERNAME"/node-docker:latest
-              docker push "$DOCKER_USERNAME"/node-docker:latest
+        - image: circleci/node:16
+      working_directory:  /app
+      steps:
+        - checkout
+        - setup-remote-docker
+          version:  17.05.0-ce
+        - run:
+          name: Build and push docker image
+          command: |
+            docker build -t node-docker .
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker tag node-docker:latest "$DOCKER_USERNAME"/node-docker:latest
+            docker push "$DOCKER_USERNAME"/node-docker:latest
 
 
 
