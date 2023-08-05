@@ -4,7 +4,6 @@ version: 2.1
 # using orbs will contains list of prepacked circleci configurations
 orbs:
   node: circleci/node@5.0.2
-#  heroku: circleci/heroku@1.2.6
 
 jobs:
     build_and_test:
@@ -13,9 +12,6 @@ jobs:
         - checkout
         - node/install-packages:
             pkg-manager: npm
-        # - run:
-        #     command:  npm run test
-        #     name: Run tests
         - run:
             command:  npm run build
             name: Build App
@@ -24,13 +20,23 @@ jobs:
             paths:
               - .
 
-#     deploy:
-#       executor: heroku/default
-#       steps:
-#         - attach_workspace:
-#             at: ~/project
-#         - heroku/deploy-via-git:
-#             force:  true
+    deploy:
+      docker:
+        working_directory:  /app
+          -image: circleci/node:16
+        steps:
+          - checkout
+          - setup-remote-docker
+            version:  17.05.0-ce
+          - run:
+            name: Build and push docker image
+            command: |
+              docker build -t node-docker .
+              echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+              docker tag node-docker:latest "$DOCKER_USERNAME"/node-docker:latest
+              docker push "$DOCKER_USERNAME"/node-docker:latest
+
+
 
 # workflows:
 #   build_test_deploy:
@@ -48,6 +54,13 @@ workflows:
   build_and_test:
     jobs:
       - build_and_test
+      - deploy:
+        requires:
+          - build_and_test
+
+    filters:
+      branches:
+        only: main
         
 
        
