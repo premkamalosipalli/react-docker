@@ -23,7 +23,7 @@ jobs:
     deploy:
       docker:
         working_directory:  /app
-          -image: circleci/node:16
+          - image: circleci/node:16
         steps:
           - checkout
           - setup-remote-docker
