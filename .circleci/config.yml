@@ -1,58 +1,58 @@
-# version: 2
-# jobs:
-#   build-test-web:
-#     docker:
-#       - image: circleci/node:16
-#     working_directory: /home/circleci/verity/web
-#     resource_class: xlarge
-#     steps:
-#       - checkout:
-#           path: /home/circleci/verity/web
-#       - setup_remote_docker:
-#           version: 17.05.0-ce
-#       - run: npm install
-#       - run: npm run build
-#       - run:
-#           name: Build and push Docker image
-#           command: |
-#             docker build -t react-docker .
-#             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-#             docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
-#             docker push "$DOCKER_USERNAME"/react-docker:latest
-      
-# workflows:
-#   version: 2
-#   build_test:
-#     jobs:
-#       - build-test-web:
-#             filters:
-#               branches:
-#                 only: test
-
-version: 2.1
-orbs:
-  node: circleci/node@4.6.0
-
+version: 2
 jobs:
-  deploy:
+  build-test-web:
     docker:
       - image: circleci/node:16
+    working_directory: /home/circleci/verity/web
+    resource_class: xlarge
     steps:
-      - checkout
+      - checkout:
+          path: /home/circleci/verity/web
       - setup_remote_docker:
           version: 17.05.0-ce
       - run: npm install
       - run: npm run build
       - run:
-          name: Build Docker image and push to Docker Hub
+          name: Build and push Docker image
           command: |
             docker build -t react-docker .
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
             docker push "$DOCKER_USERNAME"/react-docker:latest
-
+      
 workflows:
   version: 2
-  deploy:
+  build_test:
     jobs:
-      - deploy:
+      - build-test-web:
+            filters:
+              branches:
+                only: test
+
+# version: 2.1
+# orbs:
+#   node: circleci/node@4.6.0
+
+# jobs:
+#   deploy:
+#     docker:
+#       - image: circleci/node:16
+#     steps:
+#       - checkout
+#       - setup_remote_docker:
+#           version: 17.05.0-ce
+#       - run: npm install
+#       - run: npm run build
+#       - run:
+#           name: Build Docker image and push to Docker Hub
+#           command: |
+#             docker build -t react-docker .
+#             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#             docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
+#             docker push "$DOCKER_USERNAME"/react-docker:latest
+
+# workflows:
+#   version: 2
+#   deploy:
+#     jobs:
+#       - deploy:
