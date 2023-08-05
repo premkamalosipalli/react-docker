@@ -3,7 +3,7 @@ version: 2.1
 
 # using orbs will contains list of prepacked circleci configurations
 orbs:
- node: cricleci/node@5.0.2
+  node: circleci/node@5.0.2
 #  heroku: circleci/heroku@1.2.6
 
  jobs:
