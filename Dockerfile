@@ -18,7 +18,7 @@ CMD ["npm", "start"]
 FROM nginx:latest
 
 # Copy the build output from the first stage into the Nginx image
-COPY --from=build /app/build /usr/share/nginx/html
+COPY ./dist /etc/nginx/html
 
 # Copy your custom nginx.config if needed
 COPY nginx.config /etc/nginx/nginx.conf
