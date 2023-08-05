@@ -6,8 +6,8 @@ orbs:
   node: circleci/node@5.0.2
 #  heroku: circleci/heroku@1.2.6
 
- jobs:
-    build-and-test:
+jobs:
+    build_and_test:
       executor: node/default
       steps:
         - checkout
@@ -43,6 +43,11 @@ orbs:
 #         filters:
 #           branches:
 #             only: main
+
+workflows:
+  build_and_test:
+    jobs:
+      - build_and_test
         
 
        
