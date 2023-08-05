@@ -3,8 +3,8 @@ version: 2.1
 
 # using orbs will contains list of prepacked circleci configurations
 orbs:
- node: cricleci/node@5.0.2
- heroku: circleci/heroku@1.2.6
+#  node: cricleci/node@5.0.2
+#  heroku: circleci/heroku@1.2.6
 
  jobs:
     build-and-test:
@@ -23,25 +23,26 @@ orbs:
             root: ~/project
             paths:
               - .
-    deploy:
-      executor: heroku/default
-      steps:
-        - attach_workspace:
-            at: ~/project
-        - heroku/deploy-via-git:
-            force:  true
 
-workflows:
-  build_test_deploy:
-    jobs:
-      - build-and-test
-      - deploy:
-        requires:
-          - build-and-test
+#     deploy:
+#       executor: heroku/default
+#       steps:
+#         - attach_workspace:
+#             at: ~/project
+#         - heroku/deploy-via-git:
+#             force:  true
+
+# workflows:
+#   build_test_deploy:
+#     jobs:
+#       - build-and-test
+#       - deploy:
+#         requires:
+#           - build-and-test
         
-        filters:
-          branches:
-            only: main
+#         filters:
+#           branches:
+#             only: main
         
 
        
