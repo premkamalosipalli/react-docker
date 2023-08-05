@@ -32,7 +32,7 @@ jobs:
             name: Build and push docker image
             command: |
               docker build -t node-docker .
-              echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+              echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
               docker tag node-docker:latest "$DOCKER_USERNAME"/node-docker:latest
               docker push "$DOCKER_USERNAME"/node-docker:latest
 
