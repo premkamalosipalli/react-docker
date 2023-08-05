@@ -12,7 +12,7 @@
     "start": "cross-env PORT=8005 MOCK=none max dev"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.2.4",
+    "@ant-design/icons": "^4.6.2",
     "@ant-design/pro-components": "^2.4.4",
     "@umijs/max": "^4.0.74",
     "antd": "^5.4.0",
