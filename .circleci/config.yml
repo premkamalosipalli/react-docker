@@ -26,15 +26,15 @@ jobs:
       working_directory:  /app
       steps:
         - checkout
-        - setup-remote-docker
-          version:  17.05.0-ce
+        - setup_remote_docker:
+            version: 17.05.0-ce
         - run:
-          name: Build and push docker image
-          command: |
-            docker build -t node-docker .
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker tag node-docker:latest "$DOCKER_USERNAME"/node-docker:latest
-            docker push "$DOCKER_USERNAME"/node-docker:latest
+            name: Build and push docker image
+            command: |
+              docker build -t node-docker .
+              echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+              docker tag node-docker:latest "$DOCKER_USERNAME"/node-docker:latest
+              docker push "$DOCKER_USERNAME"/node-docker:latest
 
 
 
@@ -55,12 +55,11 @@ workflows:
     jobs:
       - build_and_test
       - deploy:
-        requires:
-          - build_and_test
-
-    filters:
-      branches:
-        only: main
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: main
         
 
        
