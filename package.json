@@ -42,7 +42,6 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "@ahooksjs/use-url-state": "^3.5.0",
     "@ant-design/icons": "^4.8.0",
     "@ant-design/pro-components": "^2.3.13",
     "@tinymce/tinymce-react": "^4.3.0",
