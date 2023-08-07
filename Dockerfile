@@ -10,6 +10,8 @@ COPY . .
 
 RUN npm run build
 
+EXPOSE 8005
+
 # Start the Node.js application (replace with your actual start command)
 CMD ["npm", "start"]
 
@@ -24,7 +26,7 @@ COPY --from=build ./app/dist /usr/share/nginx/html
 COPY nginx.config /etc/nginx/nginx.conf
 
 # Expose port 80 to serve the application
-EXPOSE 8005
+EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
