@@ -32,8 +32,8 @@ jobs:
             path: /home/circleci/verity/web
         - setup_remote_docker:
             version: 17.05.0-ce
-        - run: npm install
-        - run: npm run build
+        # - run: npm install
+        # - run: npm run build
 
           # - run:
           #   name: Build Docker Image
@@ -64,7 +64,7 @@ jobs:
               command: |
                 echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
                 echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
-                echo "AWS_DEFAULT_REGION: $AWS__REGION"
+                echo "AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION"
 
         - run:
             name: Push image
