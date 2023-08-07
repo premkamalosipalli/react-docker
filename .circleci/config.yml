@@ -45,17 +45,29 @@ jobs:
           #   name: Run Docker Container
           #   command: docker run -d -p 8005:8005 react-docker
           - run:
+          name: Install awscli
+          command: |
+            sudo apt update
+            sudo apt install python3-venv python3-pip
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install awscli
+
+          - run:
               name: Build and push docker image
               command: |
-                docker build -t react-docker .
+                eval "docker build -f ./Dockerfile -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM . "
 
           - run:
               name: Push image
               command:  |
-                docker run -d -p 0.0.0.0:8005:8005 --name react-docker-container react-docker
-                echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
-                docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
-                docker push "$DOCKER_USERNAME"/react-docker:latest
+                . venv/bin/activate
+                eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+                eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
+
+                eval "docker tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
+
+                eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
 
 
 
