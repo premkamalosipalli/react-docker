@@ -54,10 +54,17 @@ jobs:
               . venv/bin/activate
               pip install awscli
 
+        # - run:
+        #       name: Build and push docker image
+        #       command: |
+        #         eval "docker build -f ./Dockerfile -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM . "
+
         - run:
-              name: Build and push docker image
+              name: Debug Environment Variables
               command: |
-                eval "docker build -f ./Dockerfile -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM . "
+                echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+                echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+                echo "AWS_DEFAULT_REGION: $AWS__REGION"
 
         - run:
             name: Push image
