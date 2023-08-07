@@ -29,21 +29,21 @@ jobs:
         - setup_remote_docker:
             version: 17.05.0-ce
 
-        - run:
-          name: Build Docker Image
-          command: docker build -t react-docker .
-
-        - run:
-          name: Run Docker Container
-          command: docker run -d -p 8005:8005 react-docker
         # - run:
-        #     name: Build and push docker image
-        #     command: |
-        #       docker build -t react-docker .
-        #       echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
-        #       docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
-        #       docker push "$DOCKER_USERNAME"/react-docker:latest
-        #       docker run -dp 127.0.0.1:8000:8000 "$DOCKER_USERNAME"/react-docker
+        #   name: Build Docker Image
+        #   command: docker build -t react-docker .
+
+        # - run:
+        #   name: Run Docker Container
+        #   command: docker run -d -p 8005:8005 react-docker
+        - run:
+            name: Build and push docker image
+            command: |
+              docker build -t react-docker .
+              docker run -d -p 8005:8005 --name react-docker-container react-docker
+              echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+              docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
+              docker push "$DOCKER_USERNAME"/react-docker:latest
 
 
 
