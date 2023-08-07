@@ -32,8 +32,8 @@ jobs:
             path: /home/circleci/verity/web
         - setup_remote_docker:
             version: 17.05.0-ce
-        # - run: npm install
-        # - run: npm run build
+        - run: npm install
+        - run: npm run build
 
           # - run:
           #   name: Build Docker Image
