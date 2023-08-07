@@ -38,7 +38,7 @@ jobs:
             command:  |
               . venv/bin/activate
               
-              eval $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 868726055631.dkr.ecr.us-east-1.amazonaws.com)
+              eval $(aws ecr get-login-password --region us-east-1)
               
               eval "docker tag react/docker/web:latest 868726055631.dkr.ecr.us-east-1.amazonaws.com/react/docker/web:latest"
         
