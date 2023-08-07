@@ -6,47 +6,56 @@ orbs:
   node: circleci/node@5.0.2
 
 jobs:
-    build_and_test:
-      executor: node/default
-      steps:
-        - checkout
-        - node/install-packages:
-            pkg-manager: npm
-        - run:
-            command:  npm run build
-            name: Build App
-        - persist_to_workspace:
-            root: ~/project
-            paths:
-              - .
+    # build_and_test:
+    #   executor: node/default
+    #   steps:
+    #     - checkout
+    #     - node/install-packages:
+    #         pkg-manager: npm
+    #     - run:
+    #         command:  npm run build
+    #         name: Build App
+    #     - persist_to_workspace:
+    #         root: ~/project
+    #         paths:
+    #           - .
 
-    deploy:
+    # deploy:
+    build_and_test:
       docker:
-        - image: circleci/node:16
-      # working_directory:  /app
+          - image: circleci/node:16
+      working_directory: /home/circleci/verity/web
+      resource_class: xlarge
       steps:
-        - checkout
+        - checkout:
+            path: /home/circleci/verity/web
         - setup_remote_docker:
             version: 17.05.0-ce
+        - run: npm install
+        - run: npm run build
 
-        # - run:
-        #   name: Build Docker Image
-        #   command: docker build -t react-docker .
+          # - run:
+          #   name: Build Docker Image
+          #   command: docker build -t react-docker .
 
-        # - run:
-        #   name: Run Docker Container
-        #   command: docker run -d -p 8005:8005 react-docker
-        # - run:
-        #   name: Run Docker Container
-        #   command: docker run -d -p 8005:8005 react-docker
-        - run:
-            name: Build and push docker image
-            command: |
-              docker build -t react-docker .
-              docker run -d -p 0.0.0.0:8005:8005 --name react-docker-container react-docker
-              echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
-              docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
-              docker push "$DOCKER_USERNAME"/react-docker:latest
+          # - run:
+          #   name: Run Docker Container
+          #   command: docker run -d -p 8005:8005 react-docker
+          # - run:
+          #   name: Run Docker Container
+          #   command: docker run -d -p 8005:8005 react-docker
+          - run:
+              name: Build and push docker image
+              command: |
+                docker build -t react-docker .
+
+          - run:
+              name: Push image
+              command:  |
+                docker run -d -p 0.0.0.0:8005:8005 --name react-docker-container react-docker
+                echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+                docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
+                docker push "$DOCKER_USERNAME"/react-docker:latest
 
 
 
@@ -66,9 +75,6 @@ workflows:
   build_and_deploy:
     jobs:
       - build_and_test
-      - deploy:
-          requires:
-            - build_and_test
           filters:
             branches:
               only: main
