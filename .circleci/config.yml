@@ -35,7 +35,7 @@ jobs:
               echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
               docker tag react-docker:latest "$DOCKER_USERNAME"/react-docker:latest
               docker push "$DOCKER_USERNAME"/react-docker:latest
-              docker run -dp 127.0.0.1:8000:8000 react-docker
+              docker run -dp 127.0.0.1:8000:8000 "$DOCKER_USERNAME"/react-docker
 
 
 
