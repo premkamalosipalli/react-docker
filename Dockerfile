@@ -20,7 +20,7 @@
 FROM nginx:latest
 
 # Copy the build output from the first stage into the Nginx image
-COPY dist /etc/nginx/html
+COPY ./dist /etc/nginx/html
 
 # Copy your custom nginx.config if needed
 COPY nginx.config /etc/nginx/nginx.conf
