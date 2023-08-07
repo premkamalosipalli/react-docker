@@ -31,18 +31,20 @@ jobs:
         - run:
               name: Build image
               command: |
-                eval "docker build -t react/docker/web ."
+                eval "docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM . "
 
         - run:
             name: Push image
             command:  |
               . venv/bin/activate
               
-              eval $(aws ecr get-login-password --region us-east-1)
+              eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+
+              eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
               
-              eval "docker tag react/docker/web:latest 868726055631.dkr.ecr.us-east-1.amazonaws.com/react/docker/web:latest"
+              eval "docker tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
         
-              eval "docker push 868726055631.dkr.ecr.us-east-1.amazonaws.com/react/docker/web:latest"
+              eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
 
 
 workflows:
