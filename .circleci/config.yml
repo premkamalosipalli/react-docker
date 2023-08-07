@@ -67,11 +67,14 @@ jobs:
                 echo "AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION"
 
         - run:
+              name: Login to Amazon ECR
+              command:  |
+                . venv/bin/activate
+              
+                eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+        - run:
             name: Push image
             command:  |
-              . venv/bin/activate
-              
-              eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
 
               eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
 
