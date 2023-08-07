@@ -25,7 +25,7 @@ jobs:
       docker:
           - image: circleci/node:16
       working_directory: /home/circleci/verity/web
-      resource_class: xlarge
+      resource_class: large
       steps:
         - checkout:
             path: /home/circleci/verity/web
