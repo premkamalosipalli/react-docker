@@ -4,7 +4,7 @@ version: 2.1
 # using orbs will contains list of prepacked circleci configurations
 orbs:
   node: circleci/node@5.0.2
-  aws-ecr: circleci/aws-ecr@8.2.1
+  # aws-ecr: circleci/aws-ecr@8.2.1
 
 jobs:
     # build_and_test:
@@ -63,6 +63,8 @@ jobs:
             name: Push image
             command:  |
               . venv/bin/activate
+
+              aws configure list
               
               eval $(aws ecr get-login-password)
 
