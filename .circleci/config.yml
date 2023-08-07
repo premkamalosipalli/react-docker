@@ -68,25 +68,25 @@ jobs:
               
                 eval $(aws ecr get-login-password --region us-east-1)
 
-        # - run:
-        #       name: Build image
-        #       command: |
-        #         eval "docker build -f ./Dockerfile -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM . "
+        - run:
+              name: Build image
+              command: |
+                eval "docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM . "
 
 
-        # - run:
-        #     name: Tag image
-        #     command:  |
+        - run:
+            name: Tag image
+            command:  |
 
-        #       # eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
+              eval "docker push 868726055631.dkr.ecr.us-east-1.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
               
-        #       eval "docker tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
+              eval "docker tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
         
-        # - run:
-        #     name: Push image
-        #     command:  |
+        - run:
+            name: Push image
+            command:  |
 
-        #       eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
+              eval "docker push 868726055631.dkr.ecr.us-east-1.amazonaws.com/react/docker/web:latest"
 
 
 
