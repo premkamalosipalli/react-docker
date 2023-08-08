@@ -38,7 +38,7 @@ jobs:
             command:  |
               . venv/bin/activate
               
-              eval $(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+              eval $(docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com)
 
               eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
               
