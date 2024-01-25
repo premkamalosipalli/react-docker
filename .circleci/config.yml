@@ -1,0 +1,60 @@
+# Circle starts with version key
+version: 2.1
+
+# using orbs will contains list of prepacked circleci configurations
+orbs:
+  node: circleci/node@5.0.2
+
+jobs:
+    build_and_test:
+      docker:
+          - image: circleci/node:16
+      working_directory: /home/circleci/verity/web
+      resource_class: large
+      steps:
+        - checkout:
+            path: /home/circleci/verity/web
+        - setup_remote_docker:
+            version: 17.05.0-ce
+        - run: npm install
+        - run: npm run build
+
+        - run:
+            name: Install awscli
+            command: |
+              sudo apt update
+              sudo apt install python3-venv python3-pip
+              python3 -m venv venv
+              . venv/bin/activate
+              pip install awscli
+
+        - run:
+              name: Build image
+              command: |
+                eval "docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM . "
+
+        - run:
+            name: Push image
+            command:  |
+              . venv/bin/activate
+              
+              eval "docker login --username AWS -p $(aws ecr get-login-password --region $AWS_DEFAULT_REGION ) $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+
+              eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM"
+              
+              eval "docker tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:build-$CIRCLE_BUILD_NUM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
+        
+              eval "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/react/docker/web:latest"
+
+
+workflows:
+  build_and_deploy:
+    jobs:
+      - build_and_test:
+            filters:
+              branches:
+                only: main
+        
+
+       
+  
